@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd data
+
 #to convert SRA file to fastq
 for i in {35..40}; 
 do 
