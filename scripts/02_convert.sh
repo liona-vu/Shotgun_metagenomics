@@ -1,4 +1,7 @@
 #!/bin/bash
+#script to convert SRA to fastq files
+#load module
+module load sra-toolkit
 
 cd data
 
