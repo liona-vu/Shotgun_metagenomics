@@ -7,6 +7,6 @@ for i in {72..77};
 do 
   cd SRR81469${i}
   echo "Converting SRR81469"${i}
-  fasterq-dump SRR81469${i}.sra
+  fasterq-dump --split-files SRR81469${i}.sra
   cd ..
 done
