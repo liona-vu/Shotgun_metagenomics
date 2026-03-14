@@ -1,6 +1,16 @@
 #!/bin/bash
 #Script to download data
 
+#SBATCH --job-name=download_SRR_files
+#SBATCH --time=01:00:00
+#SBATCH --account=def-cottenie
+#SBATCH --cpus-per-task=1
+#SBATCH --error=%x_%j_error.txt
+#SBATCH --output=%x_%j_output.txt
+#SBATCH --mem=4G
+
+# %x is job name, %j is for job id!
+
 #load module
 module load sra-toolkit
 
