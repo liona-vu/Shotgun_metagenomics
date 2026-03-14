@@ -1,18 +1,23 @@
 #!/bin/bash
+#Script to download data
 
-#download data
+#load module
+module load sra-toolkit
+
+#make directory and cd into that directory
 mkdir data
 cd data
 
-#SRR8146935	- omn
-#SRR8146936	- omn
-#SRR8146937	- veg
-#SRR8146938	- omn
-#SRR8146939	- veg
-#SRR8146940	- veg
+#data that will be downloaded and what each sample represents
+#SRR8146972 -omnivore VOV26
+#SRR8146973 -vegan VOV114
+#SRR8146974 -vegan VOV113
+#SRR8146975 -omnivore VOV77
+#SRR8146976 -omnivore VOV70
+#SRR8146977 -vegan VOV29
 
-for i in {35..40};
+for i in {72..77};
 do
-echo "Dowloding SRR81469"${i}
+echo "Dowloading SRR81469"${i}
 prefetch SRR81469${i}
 done
