@@ -11,7 +11,7 @@
 mkdir database
 cd database
 
-#Download standard 70GB database
+#Download standard database
 wget https://genome-idx.s3.amazonaws.com/kraken/k2_standard_20260226.tar.gz
 
 #Gets files needed for kraken2
