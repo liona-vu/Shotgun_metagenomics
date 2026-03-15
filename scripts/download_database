@@ -1,0 +1,20 @@
+#!/bin/bash
+
+#SBATCH --job-name=download_database
+#SBATCH --time=02:00:00
+#SBATCH --account=def-cottenie
+#SBATCH --cpus-per-task=1
+#SBATCH --error=%x_%j_error.txt
+#SBATCH --output=%x_%j_output.txt
+#SBATCH --mem=4G
+
+mkdir database
+cd database
+
+#Download standard 70GB database
+wget https://genome-idx.s3.amazonaws.com/kraken/k2_standard_20260226.tar.gz
+
+#Gets files needed for kraken2
+tar -xvf k2_standard_20260226.tar.gz
+
+cd ..
