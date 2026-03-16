@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=download_database
-#SBATCH --time=02:00:00
+#SBATCH --time=05:00:00
 #SBATCH --account=def-cottenie
 #SBATCH --cpus-per-task=1
 #SBATCH --error=%x_%j_error.txt
@@ -11,8 +11,8 @@
 mkdir database
 cd database
 
-#Download standard database
-wget https://genome-idx.s3.amazonaws.com/kraken/k2_standard_20260226.tar.gz
+#Download chunky database
+wget https://genome-idx.s3.amazonaws.com/kraken/k2_core_nt_20251015.tar.gz
 
 #Gets files needed for kraken2
 tar -xvf k2_standard_20260226.tar.gz
