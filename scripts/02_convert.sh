@@ -6,8 +6,10 @@ module load sra-toolkit
 cd data
 
 #to convert SRA file to fastq
-for i in {72..77}; 
-do 
+for i in {68..78}; do
+  if [[ ${i} = 69 ]]; then
+      continue
+  fi 
   cd SRR81469${i}
   echo "Converting SRR81469"${i}
   fasterq-dump --split-files SRR81469${i}.sra
