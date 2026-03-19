@@ -9,13 +9,16 @@
 #SBATCH --output=%x_%j_error.txt
 
 module load bracken/3.0
+
 #Loop to run bracken
-for i in {72..77};
-do
+for i in {68..78}; do
+if [[ ${i} = 69 ]]; then
+  continue
+fi
   bracken -d database/. \
   -i SRR81469${i}_trimmed.report \
   -o SRR81469${i}.bracken \
-  -r 150 \
-  -l S \
+  -r 150 \ #short reads were 150bp long
+  -l S \ #we want species
   -t 0
 done
