@@ -6,16 +6,17 @@
 #SBATCH --cpus-per-task=32
 #SBATCH --error=%x_%j_error.txt
 #SBATCH --output=%x_%j_output.txt
-#SBATCH --mem=400G
+#SBATCH --mem=450G
 
 #Use of the kraken2!
 module load kraken2/2.1.6
 
-for i in {72..77};
-do
+for i in {68..78}; do
+  if [[ ${i} = 69 ]]; then
+    continue
+fi
 kraken2 --db database/. \
 --confidence 0.15 \ #increase threshold from 0
-#--memory-mapping \
 --threads 32 \
 --output SRR81469${i}_trimmed.kraken \
 --report SRR81469${i}_trimmed.report \
