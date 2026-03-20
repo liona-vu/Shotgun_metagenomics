@@ -1,6 +1,14 @@
 #!/bin/bash
 #Script to check for quality of short read sequencing
 
+#SBATCH --job-name=fastqc
+#SBATCH --time=01:30:00
+#SBATCH --account=def-cottenie
+#SBATCH --cpus-per-task=1
+#SBATCH --error=%x_%j_error.txt
+#SBATCH --output=%x_%j_output.txt
+#SBATCH --mem=10G
+
 #Load module
 module load fastqc
 
