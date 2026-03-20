@@ -1,5 +1,6 @@
 #!/bin/bash
 #script to convert SRA to fastq files
+
 #load module
 module load sra-toolkit
 
@@ -11,7 +12,6 @@ for i in {68..78}; do
       continue
   fi 
   cd SRR81469${i}
-  echo "Converting SRR81469"${i}
   fasterq-dump --split-files SRR81469${i}.sra
   cd ..
 done
