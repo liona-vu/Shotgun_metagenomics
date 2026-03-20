@@ -31,7 +31,7 @@ cd data
 #SRR8146978 - Vegan VOV20
 
 for i in {68..78};do
-  if [[ ${i} = 69 ]]; then
+  if [[ ${i} = 69 ]]; then #Skipping 69 due to it being vegetarian sample
       continue
   fi
 cd SRR81469${i}
