@@ -10,7 +10,7 @@
 #SBATCH --mem=10G
 
 #Load module
-module load fastqc
+module load fastqc/0.12.1
 
 cd data
 
