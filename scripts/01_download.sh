@@ -12,7 +12,7 @@
 # %x is job name, %j is for job id!
 
 #load module
-module load sra-toolkit
+module load sra-toolkit/3.0.9
 
 #make directory and cd into that directory
 mkdir data
