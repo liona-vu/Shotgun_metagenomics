@@ -146,8 +146,9 @@ plot
 
 #grabs actual alpha diversity values
 estimates <- estimate_richness(filtered_biom_file_2)
-estimates
-
+x <- estimates$Simpson[c(1,5,6,9,10)]
+y <- estimates$Simpson[c(2,3,4,7,8)]
+t.test(x,y)
 #Box whisker plot for the top most abundant species
 #Grabs counts using taxa sums, sort by decreasing order 
 top10 <- sort(taxa_sums(filtered_biom_file_2), 
@@ -198,6 +199,7 @@ pcoa_bray_df <- data.frame(pca = pcoa_bray$vectors)
 pcoa_bray_df <- cbind(pcoa_bray_df, metadata_df) #combine metadata with dataframe
 
 #perform permanova
+set.seed(420) #permanova keeps changing so setting seed for reproduciblity
 permanova_bray <- adonis2(phyloseq::distance(filtered_biom_file_2, method = "bray") ~ diet_type,
                     data = metadata_df)  
 p_value_bray <- permanova_bray$`Pr(>F)`[1]
@@ -241,6 +243,7 @@ pcoa_jaccard_df <- data.frame(pcoa_jaccard$vectors)
 pcoa_jaccard_df <- cbind(pcoa_jaccard_df, metadata_df)
 
 #Calculate permanova of jaccard
+set.seed(420)
 permanova_jaccard <- adonis2(phyloseq::distance(filtered_biom_file_2, method = "jaccard") ~ diet_type,
                           data = metadata_df, binary = TRUE)  
 #grabs p value
@@ -264,6 +267,7 @@ plot_combined <- grid.arrange(plot_bray, plot_jaccard, ncol = 2)
 # Differential abundant species
 ########################################
 #Run ancombc using benjamini-hochberg correction
+set.sedd(123)
 ancombc_out <- ancombc2(data = filtered_biom_file_2, 
                         tax_level = NULL, #want to keep the taxon ID number!
                         fix_formula = "diet_type", 
@@ -309,12 +313,13 @@ ancombc_res_sig
 
 #Therefore, will sort by the lowest q values available and pull the top "most significant", as in, which taxa has the smallest p values?
 ancombc_res_sig <- ancombc_res_names_clean %>%
-  arrange(q_diet_typeVegan)
+  arrange(q_diet_typeVegan) %>%
+  filter(abs(lfc_diet_typeVegan) > 1)
 
 #grab top 30 DAs
 top_ancombc_res_sig <- head(ancombc_res_sig, n =30)
 View(top_ancombc_res_sig)
-#From here most "significant" are Gordonibacter massiliensis, Prevotellamassilia uncultured Prevotellamassilia sp
+#From here most "significant" are Gordonibacter massiliensis, Prevotellamassilia, uncultured Prevotellamassilia sp
 
 #plot top 30 different abundant species from vegan and omnivores
 ggplot(top_ancombc_res_sig, aes(x = lfc_diet_typeVegan, y = reorder(Genus_species, lfc_diet_typeVegan))) +
