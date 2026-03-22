@@ -22,8 +22,6 @@ library(gridExtra)
 #Load in files
 ##############################
 
-
-
 biom_file <- import_biom("combined_kraken.biom")
 
 #Check sample names
@@ -88,6 +86,17 @@ sample_names(filtered_biom_file_2)
 ########################################
 # Alpha diversity
 ########################################
+
+#Create metadata table
+metadata_df <- data.frame(diet_type = c("Vegan", "Omnivore", "Omnivore", "Omnivore", "Vegan", "Vegan",
+                                        "Omnivore", "Omnivore", "Vegan", "Vegan"))
+
+#ADD SRR # as row names
+row.names(metadata_df) <- SRR_names
+
+#Add metadata to phyloseq file
+sample_data(filtered_biom_file_2) <- metadata_df
+
 #Calculate relative abundance
 physeq_rel_2 <- transform_sample_counts(filtered_biom_file_2, function(x) x / sum(x))
 physeq_phy_2 <- tax_glom(physeq_rel_2, taxrank = "Rank2") 
@@ -123,21 +132,12 @@ ggplot(df_3, aes(x = Sample, y = Abundance, fill = clean_names)) +
            position = "stack", 
            color = "black", 
            linewidth = 0.2) +
+  facet_wrap(~diet_type, scales="free_x") + #removes empty bars
   labs(y = "Relative Abundance", x = "Samples") +
   scale_x_discrete(guide = guide_axis(angle = 62.5)) +
   theme_minimal() +
   guides(fill = guide_legend(title = "Phylum Level"))
 #from cleaner plot above, seems that bacillota and bacteroidata are the most abundant phyla
-
-#Create metadata table
-metadata_df <- data.frame(diet_type = c("Vegan", "Omnivore", "Omnivore", "Omnivore", "Vegan", "Vegan",
-                                        "Omnivore", "Omnivore", "Vegan", "Vegan"))
-
-#ADD SRR # as row names
-row.names(metadata_df) <- SRR_names
-
-#Add metadata to phyloseq file
-sample_data(filtered_biom_file_2) <- metadata_df
 
 #plot alpha diversity
 plot <- plot_richness(filtered_biom_file_2, color = "diet_type", measures = c("Observed", "Chao1", "Shannon", "Simpson"), nrow = 2) +
@@ -202,7 +202,7 @@ permanova_bray <- adonis2(phyloseq::distance(filtered_biom_file_2, method = "bra
                     data = metadata_df)  
 p_value_bray <- permanova_bray$`Pr(>F)`[1]
 class(p_value_bray)
-#Not significant, p value of 0.163
+#Not significant, p value of 0.178
 
 #plot again 
 plot_bray <- ggplot(data = pcoa_bray_df, aes(x = pca.Axis.1, y = pca.Axis.2, color = diet_type)) +
@@ -212,6 +212,8 @@ plot_bray <- ggplot(data = pcoa_bray_df, aes(x = pca.Axis.1, y = pca.Axis.2, col
   ggtitle(label = "PCoA plot of Bray Curtis dissimilarity", paste0("P value: ", p_value_bray)) +
   theme_minimal() +
   labs(color = "Diet Type") 
+
+plot_bray
 
 #Trying NMDS
 nmds_bray <- ordinate(filtered_biom_file_2, method="NMDS", distance = "bray")
@@ -231,7 +233,7 @@ ggplot(data = nmds_df, aes(x = MDS1, y = MDS2, color = diet_type)) +
 
 #Plot Jaccard's distance
 pcoa_jaccard <- ordinate(filtered_biom_file_2, method = "PCoA", distance = "jaccard", binary = TRUE)
-plot_ordination(filtered_biom_file_2, pcoa_jaccard, color = "diet_type") 
+#plot_ordination(filtered_biom_file_2, pcoa_jaccard, color = "diet_type") 
 
 pca_jaccard <- round(pcoa_jaccard$values$Relative_eig *100, 1)
 
@@ -253,7 +255,7 @@ plot_jaccard <- ggplot(data = pcoa_jaccard_df, aes(x = Axis.1, y = Axis.2, color
   ggtitle(label = "PCoA plot of Jaccard dissimilarity", paste0("P value: ", p_value_jaccard)) +
   theme_minimal() +
   labs(color = "Diet Type")
-#not significant in diversity p value of 0.168
+#not significant in diversity p value of 0.169
 
 #combine graphs together
 plot_combined <- grid.arrange(plot_bray, plot_jaccard, ncol = 2)
@@ -280,38 +282,42 @@ View(ancombc_out$res)
 #pull out results table
 ancombc_res <- ancombc_out$res
 rownames(ancombc_res) <- ancombc_res$taxon 
+class(ancombc_res)
 
 #clean genus and species names
 taxa_names <- as.data.frame(filtered_biom_file_2@tax_table)
-taxa_names$taxon <- rownames(tax_df)
-taxa_names_clean <- taxa_names %>%
+ancombc_res_names <- merge(ancombc_res, taxa_names, by = 0) #merge by matching row names, inner join
+#text<- merge(ancombc_res, taxa_names)
+  #taxa_names$taxon <- rownames(tax_df)
+ancombc_res_names_clean <- ancombc_res_names %>%
   mutate(Genus = gsub("g__", "", Rank6)) %>%
   mutate(Species = gsub("s__", "", Rank7)) %>%
   unite(col= "Genus_species", Genus, Species, sep = " ")
 
-head(taxa_names_clean)
+head(ancombc_res_names_clean)
 
 #merge by rownames
-ancombc_res_taxon <- merge(ancombc_res, taxa_names_clean)
-head(ancombc_res_taxon)
+#ancombc_res_taxon <- merge(ancombc_res, taxa_names_clean)
+#head(ancombc_res_taxon)
 
 #Filter by < 0.05
-ancombc_res_sig <- ancombc_res_taxon %>% 
+ancombc_res_sig <- ancombc_res_names_clean %>% 
   filter(q_diet_typeVegan < 0.05)
 
 ancombc_res_sig
 #Unfortunately, no results are significant from adjusted p values or values less than 0.05
 
 #Therefore, will sort by the lowest q values available and pull the top "most significant", as in, which taxa has the smallest p values?
-ancombc_res_sig <- ancombc_res_taxon %>%
+ancombc_res_sig <- ancombc_res_names_clean %>%
   arrange(q_diet_typeVegan)
 
-top_20_ancombc_res_sig <- head(ancombc_res_sig, n =20)
-View(top_20_ancombc_res_sig)
+#grab top 30 DAs
+top_ancombc_res_sig <- head(ancombc_res_sig, n =30)
+View(top_ancombc_res_sig)
 #From here most "significant" are Gordonibacter massiliensis, Prevotellamassilia uncultured Prevotellamassilia sp
 
-#plot top 20 different abundant species from vegan and omnivores
-ggplot(top_20_ancombc_res_sig, aes(x = lfc_diet_typeVegan, y = reorder(Genus_species, lfc_diet_typeVegan))) +
+#plot top 30 different abundant species from vegan and omnivores
+ggplot(top_ancombc_res_sig, aes(x = lfc_diet_typeVegan, y = reorder(Genus_species, lfc_diet_typeVegan))) +
   geom_point(aes(color = q_diet_typeVegan), size = 3) +
   geom_errorbar(aes(xmin = lfc_diet_typeVegan - se_diet_typeVegan, 
                     xmax = lfc_diet_typeVegan + se_diet_typeVegan)) +
