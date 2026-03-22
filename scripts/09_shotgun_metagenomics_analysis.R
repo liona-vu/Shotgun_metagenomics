@@ -146,9 +146,7 @@ plot
 
 #grabs actual alpha diversity values
 estimates <- estimate_richness(filtered_biom_file_2)
-x <- estimates$Simpson[c(1,5,6,9,10)]
-y <- estimates$Simpson[c(2,3,4,7,8)]
-t.test(x,y)
+
 #Box whisker plot for the top most abundant species
 #Grabs counts using taxa sums, sort by decreasing order 
 top10 <- sort(taxa_sums(filtered_biom_file_2), 
