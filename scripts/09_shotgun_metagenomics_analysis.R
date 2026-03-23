@@ -202,7 +202,7 @@ permanova_bray <- adonis2(phyloseq::distance(filtered_biom_file_2, method = "bra
                     data = metadata_df)  
 p_value_bray <- permanova_bray$`Pr(>F)`[1]
 class(p_value_bray)
-#Not significant, p value of 0.178
+#Not significant, p value of 0.168
 
 #plot again 
 plot_bray <- ggplot(data = pcoa_bray_df, aes(x = pca.Axis.1, y = pca.Axis.2, color = diet_type)) +
@@ -256,7 +256,7 @@ plot_jaccard <- ggplot(data = pcoa_jaccard_df, aes(x = Axis.1, y = Axis.2, color
   ggtitle(label = "PCoA plot of Jaccard dissimilarity", paste0("P value: ", p_value_jaccard)) +
   theme_minimal() +
   labs(color = "Diet Type")
-#not significant in diversity p value of 0.169
+#not significant in diversity p value of 0.166
 
 #combine graphs together
 plot_combined <- grid.arrange(plot_bray, plot_jaccard, ncol = 2)
@@ -289,8 +289,8 @@ class(ancombc_res)
 #clean genus and species names
 taxa_names <- as.data.frame(filtered_biom_file_2@tax_table)
 ancombc_res_names <- merge(ancombc_res, taxa_names, by = 0) #merge by matching row names, inner join
-#text<- merge(ancombc_res, taxa_names)
-  #taxa_names$taxon <- rownames(tax_df)
+
+#clean names                                    
 ancombc_res_names_clean <- ancombc_res_names %>%
   mutate(Genus = gsub("g__", "", Rank6)) %>%
   mutate(Species = gsub("s__", "", Rank7)) %>%
@@ -298,15 +298,11 @@ ancombc_res_names_clean <- ancombc_res_names %>%
 
 head(ancombc_res_names_clean)
 
-#merge by rownames
-#ancombc_res_taxon <- merge(ancombc_res, taxa_names_clean)
-#head(ancombc_res_taxon)
-
 #Filter by < 0.05
 ancombc_res_sig <- ancombc_res_names_clean %>% 
   filter(q_diet_typeVegan < 0.05)
 
-ancombc_res_sig
+View(ancombc_res_sig)
 #Unfortunately, no results are significant from adjusted p values or values less than 0.05
 
 #Therefore, will sort by the lowest q values available and pull the top "most significant", as in, which taxa has the smallest p values?
