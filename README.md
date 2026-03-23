@@ -108,7 +108,7 @@ After determining that Kraken2 has identified sufficient percent of classified r
 
 <img width="2043" height="982" alt="20260322_PCoA_plot_bray_jaccard_legit" src="https://github.com/user-attachments/assets/4e9f7e40-ed7e-46a8-8bc6-21b9575bd639" />
 
-**Figure 4. Principal Coordinate Analysis (PCoA) plots of dissimilarity across different types of diets.** PCoA plots were generated to display the spatial distribution of each sample coloured by diet type (vegan or omnivore) using two different beta diversity measures: A. Bray-Curtis where variance can be explained by 32.2% and 21.5% for PCoA 1 and PCoA 2, and B. Jaccard where 15.7% and 13.9% for each PCoA can be explained. PERMANOVA P values of 0.162 and 0.168 were observed for Bray-Curtis and Jaccard methods, respectively. Closer points indicate more similar microbial communities while farther points indicate greater dissimilarity.
+**Figure 4. Principal Coordinate Analysis (PCoA) plots of dissimilarity across different types of diets.** PCoA plots were generated to display the spatial distribution of each sample coloured by diet type (vegan or omnivore) using two different beta diversity measures: A. Bray-Curtis where variance can be explained by 32.2% and 21.5% for PCoA 1 and PCoA 2, and B. Jaccard where 15.7% and 13.9% for each PCoA can be explained. PERMANOVA P values of 0.162 and 0.166 were observed for Bray-Curtis and Jaccard methods, respectively. Closer points indicate more similar microbial communities while farther points indicate greater dissimilarity.
 
 <br>
 
