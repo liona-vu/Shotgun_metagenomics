@@ -119,7 +119,7 @@ Next, alpha diversity measures were calculated for all samples. Observed represe
 
 <img width="1168" height="982" alt="20260322_differential_abundance_final" src="https://github.com/user-attachments/assets/060156d4-d720-489a-993e-74941821b2ee" />
 
-**Figure 5. Differentially abundant bacterial species between vegan and omnivore diets.** Top 30 taxa with differential abundance difference in vegans and omnivore diets. Bacterial species were extracted with the smallest p values and filtered with absolute logfoldchange > 1. Negative log fold changes were associated with omnivore diets and positive log fold changes were associated with vegan diets. Error bars represent standard error (SE).
+**Figure 5. Differentially abundant bacterial species between vegan and omnivore diets.** Top 30 taxa with differential abundance difference in vegans and omnivore diets were selected with the smallest q values and were filtered with absolute logfoldchange > 1. Negative log fold changes were associated with omnivore diets and positive log fold changes were associated with vegan diets. Error bars represent standard error (SE).
 
 <br>
 
