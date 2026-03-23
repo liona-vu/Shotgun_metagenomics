@@ -5,7 +5,7 @@
 # March 23 2026
 
 ##############################
-#Load in libraries
+#Load in libraries and EDA
 ##############################
 
 library(biomformat)
